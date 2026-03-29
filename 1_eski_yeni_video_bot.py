@@ -413,31 +413,39 @@ def create_video(before_pil, after_pil, before_year, after_year, celeb_name, mus
 # ─────────────────────────────────────────────────────────────
 # MUSIC DOWNLOAD
 # ─────────────────────────────────────────────────────────────
+MUSIC_QUERIES = [
+    "ytsearch1:NCS hip hop energetic no copyright",
+    "ytsearch1:NCS trap beat hard no copyright 2024",
+    "ytsearch1:NCS phonk aggressive no copyright",
+    "ytsearch1:trap beat no copyright free use hip hop",
+    "ytsearch1:NCS release hip hop upbeat no copyright",
+    "ytsearch1:hard trap instrumental no copyright NCS",
+    "ytsearch1:NCS gaming hip hop no copyright energetic",
+    "ytsearch1:phonk drift no copyright free use NCS",
+    "ytsearch1:drill beat no copyright free hip hop 2024",
+    "ytsearch1:NCS trap phonk hard no copyright free",
+]
+
 def download_music(celeb_name):
-    print(f"  Downloading music ({celeb_name})...")
-    queries = [
-        f"ytsearch1:{celeb_name} greatest hits official",
-        f"ytsearch1:{celeb_name} best song",
-        f"ytsearch1:top pop hits 2024",
-    ]
+    print(f"  Downloading music...")
     for ext in [".m4a", ".webm", ".mp4", ".mp3"]:
         p = MUSIC_BASE + ext
         if os.path.exists(p):
             try: os.remove(p)
             except: pass
 
+    query = random.choice(MUSIC_QUERIES)
     opts = {"format": "bestaudio/best", "outtmpl": f"{MUSIC_BASE}.%(ext)s",
             "noplaylist": True, "quiet": True}
-    for q in queries:
-        try:
-            with yt_dlp.YoutubeDL(opts) as ydl:
-                ydl.download([q])
-            for ext in [".m4a", ".webm", ".mp4", ".mp3"]:
-                if os.path.exists(MUSIC_BASE + ext):
-                    print(f"  Music OK: {MUSIC_BASE + ext}")
-                    return MUSIC_BASE + ext
-        except Exception as e:
-            print(f"  [WARN] Music attempt failed: {e}")
+    try:
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            ydl.download([query])
+        for ext in [".m4a", ".webm", ".mp4", ".mp3"]:
+            if os.path.exists(MUSIC_BASE + ext):
+                print(f"  Music OK: {MUSIC_BASE + ext}")
+                return MUSIC_BASE + ext
+    except Exception as e:
+        print(f"  [WARN] Music failed: {e}")
     return None
 
 
