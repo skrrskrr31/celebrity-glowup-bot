@@ -428,16 +428,16 @@ def create_video(before_pil, after_pil, before_year, after_year, celeb_name, mus
 # MUSIC DOWNLOAD
 # ─────────────────────────────────────────────────────────────
 MUSIC_QUERIES = [
-    "ytsearch1:NCS hip hop energetic no copyright",
-    "ytsearch1:NCS trap beat hard no copyright 2024",
-    "ytsearch1:NCS phonk aggressive no copyright",
-    "ytsearch1:trap beat no copyright free use hip hop",
-    "ytsearch1:NCS release hip hop upbeat no copyright",
-    "ytsearch1:hard trap instrumental no copyright NCS",
-    "ytsearch1:NCS gaming hip hop no copyright energetic",
-    "ytsearch1:phonk drift no copyright free use NCS",
-    "ytsearch1:drill beat no copyright free hip hop 2024",
-    "ytsearch1:NCS trap phonk hard no copyright free",
+    "scsearch1:NCS hip hop energetic no copyright",
+    "scsearch1:NCS trap beat hard no copyright",
+    "scsearch1:NCS phonk aggressive no copyright",
+    "scsearch1:trap beat no copyright free use hip hop",
+    "scsearch1:NCS release hip hop upbeat no copyright",
+    "scsearch1:hard trap instrumental no copyright",
+    "scsearch1:NCS gaming hip hop no copyright energetic",
+    "scsearch1:phonk drift no copyright free use",
+    "scsearch1:drill beat no copyright free hip hop",
+    "scsearch1:NCS trap phonk hard no copyright",
 ]
 
 def download_music(celeb_name):
@@ -448,18 +448,23 @@ def download_music(celeb_name):
             try: os.remove(p)
             except: pass
 
-    query = random.choice(MUSIC_QUERIES)
-    opts = {"format": "bestaudio/best", "outtmpl": f"{MUSIC_BASE}.%(ext)s",
-            "noplaylist": True, "quiet": True}
-    try:
-        with yt_dlp.YoutubeDL(opts) as ydl:
-            ydl.download([query])
-        for ext in [".m4a", ".webm", ".mp4", ".mp3"]:
-            if os.path.exists(MUSIC_BASE + ext):
-                print(f"  Music OK: {MUSIC_BASE + ext}")
-                return MUSIC_BASE + ext
-    except Exception as e:
-        print(f"  [WARN] Music failed: {e}")
+    import random as _random
+    queries = MUSIC_QUERIES.copy()
+    _random.shuffle(queries)
+    for query in queries:
+        opts = {"format": "bestaudio/best", "outtmpl": f"{MUSIC_BASE}.%(ext)s",
+                "noplaylist": True, "quiet": True}
+        try:
+            with yt_dlp.YoutubeDL(opts) as ydl:
+                ydl.download([query])
+            for ext in [".m4a", ".webm", ".mp4", ".mp3"]:
+                if os.path.exists(MUSIC_BASE + ext):
+                    print(f"  Music OK: {MUSIC_BASE + ext}")
+                    return MUSIC_BASE + ext
+        except Exception as e:
+            print(f"  [WARN] Music attempt failed ({query[:40]}): {e}")
+            continue
+    print("  [WARN] All music attempts failed, continuing without music.")
     return None
 
 
