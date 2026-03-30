@@ -179,9 +179,23 @@ def find_before_after_photos(wiki_title):
     return before_url, after_url, str(before_year), str(after_year)
 
 def download_image(url):
-    r = requests.get(url, headers=HEADERS, timeout=15)
-    r.raise_for_status()
-    return Image.open(BytesIO(r.content)).convert("RGB")
+    import time
+    for attempt in range(4):
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=20)
+            if r.status_code == 429:
+                wait = (attempt + 1) * 10
+                print(f"  Rate limited (429), waiting {wait}s...")
+                time.sleep(wait)
+                continue
+            r.raise_for_status()
+            return Image.open(BytesIO(r.content)).convert("RGB")
+        except requests.exceptions.HTTPError as e:
+            if attempt < 3:
+                time.sleep((attempt + 1) * 10)
+            else:
+                raise
+    raise Exception(f"Failed to download image after retries: {url}")
 
 
 # ─────────────────────────────────────────────────────────────
