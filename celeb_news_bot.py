@@ -24,12 +24,22 @@ TELEGRAM_CHAT_ID   = os.environ.get("TELEGRAM_CHAT_ID", "")
 SECRET_PATH = os.path.join(script_dir, "secret.json")
 TOKEN_PATH  = os.path.join(script_dir, "token.json")
 
-_secret_env = os.environ.get("SECRET_JSON")
-if _secret_env and not os.path.exists(SECRET_PATH):
-    open(SECRET_PATH, "w").write(_secret_env)
-_token_env = os.environ.get("TOKEN_JSON")
-if _token_env and not os.path.exists(TOKEN_PATH):
-    open(TOKEN_PATH, "w").write(_token_env)
+def _write_env_json(env_name, path):
+    """Secret duz JSON de olabilir base64 de -> ikisini de destekle."""
+    import base64
+    v = os.environ.get(env_name, "")
+    if not v or os.path.exists(path):
+        return
+    v = v.strip()
+    if not v.startswith("{"):
+        try:
+            v = base64.b64decode(v).decode("utf-8").strip()
+        except Exception:
+            pass
+    open(path, "w", encoding="utf-8").write(v)
+
+_write_env_json("SECRET_JSON", SECRET_PATH)
+_write_env_json("TOKEN_JSON", TOKEN_PATH)
 
 OUTPUT_VIDEO = os.path.join(script_dir, "celeb_news_shorts.mp4")
 
