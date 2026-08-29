@@ -519,7 +519,7 @@ def create_video(img, music=None, volume=0.18):
     import numpy as np
     temp = "_temp_card.jpg"
     img.save(temp, quality=95)
-    duration = 15
+    duration = 10
     arr = np.array(img)
     vw, vh = arr.shape[1], arr.shape[0]
 
@@ -533,8 +533,10 @@ def create_video(img, music=None, volume=0.18):
     if music and os.path.exists(music):
         try:
             a = AudioFileClip(music)
-            s = random.randint(0, max(0, int(a.duration) - 17))
-            clip = clip.set_audio(a.subclip(s, min(s + duration, a.duration)).volumex(volume))
+            s = random.randint(0, max(0, int(a.duration) - duration - 2))
+            end = min(s + duration, a.duration)
+            aud = a.subclip(s, end).volumex(volume).audio_fadeout(0.6)
+            clip = clip.set_audio(aud)
         except Exception as e:
             print(f"[WARN] muzik: {e}")
     clip.write_videofile(OUTPUT_VIDEO, fps=24, codec="libx264", logger=None)
