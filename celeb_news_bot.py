@@ -488,27 +488,82 @@ def gen_cta(text):
     return out or random.choice(["What do you think?", "Were you surprised?", "Team who?", "Your thoughts?"])
 
 
+JAMENDO_CID = os.environ.get("JAMENDO_CLIENT_ID", "")
+
+
+def fetch_jamendo(mood):
+    """Jamendo'dan ruh haline uygun telifsiz enstrumantal parca indir -> (path, credit) veya (None,'')."""
+    if not JAMENDO_CID:
+        return None, ""
+    import requests
+    tags = {"upbeat": "upbeat+happy+energetic+funky",
+            "somber": "sad+emotional+cinematic+piano"}.get(mood, "background")
+    order = random.choice(["popularity_month", "popularity_total", "listens_month", "listens_total"])
+    offset = random.choice([0, 0, 50, 100, 150])
+    try:
+        r = requests.get("https://api.jamendo.com/v3.0/tracks/", timeout=20, params={
+            "client_id": JAMENDO_CID, "format": "json", "limit": 100, "offset": offset,
+            "order": order, "audioformat": "mp32", "vocalinstrumental": "instrumental",
+            "audiodlallowed": "true", "fuzzytags": tags,
+        })
+        results = r.json().get("results", [])
+    except Exception as e:
+        print(f"[WARN] jamendo api: {e}")
+        return None, ""
+
+    def lic_ok_commercial(t):
+        u = (t.get("license_ccurl") or "")
+        return "-nc" not in u
+    dl = [t for t in results if t.get("audiodownload")]
+    pool = [t for t in dl if lic_ok_commercial(t)] or dl
+    if not pool:
+        return None, ""
+    t = random.choice(pool)
+    try:
+        mp3 = requests.get(t["audiodownload"], timeout=40,
+                           headers={"User-Agent": "Mozilla/5.0"})
+        mp3.raise_for_status()
+        path = os.path.join(script_dir, "_jamendo.mp3")
+        open(path, "wb").write(mp3.content)
+        AudioFileClip(path).close()  # dogrula
+        u = (t.get("license_ccurl") or "")
+        lic = ("CC0" if "zero" in u else "CC BY-SA" if "by-sa" in u
+               else "CC BY-NC" if "-nc" in u else "CC BY")
+        credit = f'Music: "{t["name"]}" by {t["artist_name"]} ({lic}) - via Jamendo'
+        print(f"[OK] jamendo: {t['name']} - {t['artist_name']} [{lic}]")
+        return path, credit
+    except Exception as e:
+        print(f"[WARN] jamendo indir: {e}")
+        return None, ""
+
+
 def pick_music(text):
     print("Muzik...")
-    md = os.path.join(script_dir, "muzikler")
-    up = os.path.join(md, "upbeat")
-    somber = os.path.join(md, "somber")
-    up_f = [os.path.join(up, f) for f in os.listdir(up)] if os.path.isdir(up) else []
-    so_f = [os.path.join(somber, f) for f in os.listdir(somber)] if os.path.isdir(somber) else []
-    allf = [f for f in up_f + so_f if f.lower().endswith(".mp3")]
-    if not allf:
-        return None, 0.15
     tone = _groq(
         f"What's the overall tone of this celebrity news?\n\"{text[:300]}\"\nAnswer one word: UPBEAT or SOMBER",
         fallback="UPBEAT").upper()
-    if "SOMBER" in tone and [f for f in so_f if f.lower().endswith(".mp3")]:
-        pick = random.choice([f for f in so_f if f.lower().endswith(".mp3")])
-    elif [f for f in up_f if f.lower().endswith(".mp3")]:
-        pick = random.choice([f for f in up_f if f.lower().endswith(".mp3")])
+    mood = "somber" if "SOMBER" in tone else "upbeat"
+
+    j_path, j_credit = fetch_jamendo(mood)
+    if j_path:
+        return j_path, 0.16, j_credit
+
+    # fallback: yerel muzikler/
+    md = os.path.join(script_dir, "muzikler")
+    up_f = [os.path.join(md, "upbeat", f) for f in os.listdir(os.path.join(md, "upbeat"))] if os.path.isdir(os.path.join(md, "upbeat")) else []
+    so_f = [os.path.join(md, "somber", f) for f in os.listdir(os.path.join(md, "somber"))] if os.path.isdir(os.path.join(md, "somber")) else []
+    up_f = [f for f in up_f if f.lower().endswith(".mp3")]
+    so_f = [f for f in so_f if f.lower().endswith(".mp3")]
+    if mood == "somber" and so_f:
+        pick = random.choice(so_f)
+    elif up_f:
+        pick = random.choice(up_f)
+    elif so_f:
+        pick = random.choice(so_f)
     else:
-        pick = random.choice(allf)
-    print(f"[OK] {os.path.basename(pick)}")
-    return pick, 0.18
+        return None, 0.15, ""
+    print(f"[OK] yerel: {os.path.basename(pick)}")
+    return pick, 0.18, ""
 
 
 # ─────────────────────────────────────────────────────────────
@@ -539,7 +594,8 @@ def create_video(img, music=None, volume=0.18):
             clip = clip.set_audio(aud)
         except Exception as e:
             print(f"[WARN] muzik: {e}")
-    clip.write_videofile(OUTPUT_VIDEO, fps=24, codec="libx264", logger=None)
+    clip.write_videofile(OUTPUT_VIDEO, fps=24, codec="libx264",
+                         audio_codec="aac", audio_bitrate="192k", logger=None)
     try:
         os.remove(temp)
     except Exception:
@@ -627,11 +683,12 @@ if __name__ == "__main__":
     title = gen_title(text, person)
     hook = gen_hook(text)
     cta = gen_cta(text)
-    music, volume = pick_music(text)
+    music, volume, music_credit = pick_music(text)
 
     first = summary.split('.')[0].strip()
     prefix = (person + " - ") if person and person.lower() not in first.lower() else ""
-    description = (f"{prefix}{first}.\n\n{text[:3500]}\n\n"
+    credit_line = f"\n\n{music_credit}" if music_credit else ""
+    description = (f"{prefix}{first}.\n\n{text[:3400]}{credit_line}\n\n"
                    f"#shorts #celebrity #celebritynews #hollywood #entertainment #gossip #viral"
                    f"{(' #' + person.replace(' ', '').lower()) if person else ''}")
 
