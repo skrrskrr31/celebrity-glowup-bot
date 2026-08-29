@@ -45,8 +45,8 @@ OUTPUT_VIDEO = os.path.join(script_dir, "celeb_news_shorts.mp4")
 
 W, H = 1080, 1920
 PAD  = 44
-CHANNEL_NAME   = "Celeb Buzz"       # <-- YouTube kanal adinla ayni yap
-CHANNEL_HANDLE = "@celebbuzz"       # <-- kanal handle'inla ayni yap
+CHANNEL_NAME   = "Celeb Buzz"          # YouTube kanal adi
+CHANNEL_HANDLE = "@CelebBuzzNews"      # YouTube handle
 GROQ_MODEL     = "openai/gpt-oss-120b"
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125 Safari/537.36"}
