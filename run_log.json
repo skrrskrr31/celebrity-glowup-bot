@@ -2,12 +2,6 @@
   "bot": "celeb_news",
   "runs": [
     {
-      "ts": "2026-08-29T13:27:50",
-      "status": "ok",
-      "video_id": "kM9KbR3IuAs",
-      "title": "Dolly Parton May Get Nashville Airport Renamed! #shorts #dollyparton #Nashville"
-    },
-    {
       "ts": "2026-08-29T14:17:31",
       "status": "ok",
       "video_id": "SsFbX2dluM0",
@@ -120,6 +114,12 @@
       "status": "ok",
       "video_id": "1MDXVW5Wdws",
       "title": "Michele Reiners' daughter sells home crime site #shorts #michelereiners #crime"
+    },
+    {
+      "ts": "2026-11-19T23:22:28",
+      "status": "ok",
+      "video_id": "ifu2wIj6JSg",
+      "title": "Megyn Kelly Calls Leo DiCaprio a ‘Fat Slob’ on His Birthday! #shorts #megynkelly"
     }
   ]
 }
