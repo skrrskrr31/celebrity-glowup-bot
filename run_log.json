@@ -2,12 +2,6 @@
   "bot": "celeb_news",
   "runs": [
     {
-      "ts": "2026-08-29T19:34:05",
-      "status": "ok",
-      "video_id": "q07GvR3b32U",
-      "title": "Taylor Swift Gives $50K to Mom Who Saved Teens from Crash #shorts #taylorswift"
-    },
-    {
       "ts": "2026-08-30T19:33:50",
       "status": "ok",
       "video_id": "lreEA-8jJmo",
@@ -120,6 +114,12 @@
       "status": "ok",
       "video_id": "_mbbcxRAuK8",
       "title": "Victor & Katie’s Date: Wedding on Traitors New Blood? #shorts #traitorsnewblood"
+    },
+    {
+      "ts": "2026-11-21T21:58:34",
+      "status": "ok",
+      "video_id": "fwheWLi5veY",
+      "title": "Miley Cyrus & Maxx Morando's Sweet Wedding Rehearsal Reveal! #shorts #mileycyrus"
     }
   ]
 }
