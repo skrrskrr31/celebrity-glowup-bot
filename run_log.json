@@ -2,12 +2,6 @@
   "bot": "celeb_news",
   "runs": [
     {
-      "ts": "2026-08-30T19:33:50",
-      "status": "ok",
-      "video_id": "lreEA-8jJmo",
-      "title": "Billie Eilish’s Brother’s Big Wedding — Who Officiated? #shorts #billieeilishs"
-    },
-    {
       "ts": "2026-08-31T21:42:06",
       "status": "ok",
       "video_id": "mHmxAPnqDaw",
@@ -120,6 +114,12 @@
       "status": "ok",
       "video_id": "fwheWLi5veY",
       "title": "Miley Cyrus & Maxx Morando's Sweet Wedding Rehearsal Reveal! #shorts #mileycyrus"
+    },
+    {
+      "ts": "2026-11-22T22:15:59",
+      "status": "ok",
+      "video_id": "FQNufBay-Bc",
+      "title": "Sheila Mangubat’s Tragic End: What Really Happened? #shorts #dayfiancé"
     }
   ]
 }
