@@ -2,12 +2,6 @@
   "bot": "celeb_news",
   "runs": [
     {
-      "ts": "2026-09-01T19:41:25",
-      "status": "ok",
-      "video_id": "wzxMfJPHNF8",
-      "title": "Jonathan Bailey quits WestEnd after Ariana Grande exit 😱 #shorts #jonathanbailey"
-    },
-    {
       "ts": "2026-09-02T19:34:15",
       "status": "ok",
       "video_id": "WUqct7I9CKM",
@@ -120,6 +114,12 @@
       "status": "ok",
       "video_id": "KAmHzI45ALc",
       "title": "Taylor Swift Called a ‘Bully’ by Former Classmate – #shorts #taylorswift"
+    },
+    {
+      "ts": "2026-11-25T01:13:27",
+      "status": "ok",
+      "video_id": "GQLhmzL7mIk",
+      "title": "Halle Berry's Fight Over Son: Is He Safe? #shorts #halleberry #celebrity"
     }
   ]
 }
