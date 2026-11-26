@@ -2,12 +2,6 @@
   "bot": "celeb_news",
   "runs": [
     {
-      "ts": "2026-09-02T19:34:15",
-      "status": "ok",
-      "video_id": "WUqct7I9CKM",
-      "title": "Tiger Woods & Vanessa Trump: DUI Deal Support #shorts #howtigerwoods #Vanessa"
-    },
-    {
       "ts": "2026-09-03T19:30:16",
       "status": "ok",
       "video_id": "FTjXITBV_Hs",
@@ -120,6 +114,12 @@
       "status": "ok",
       "video_id": "GQLhmzL7mIk",
       "title": "Halle Berry's Fight Over Son: Is He Safe? #shorts #halleberry #celebrity"
+    },
+    {
+      "ts": "2026-11-26T00:48:42",
+      "status": "ok",
+      "video_id": "eh8BSH0Dh1s",
+      "title": "Brad Pitt & Angelina Jolie End Court Fight—Surprise Settlement #shorts #bradpitt"
     }
   ]
 }
