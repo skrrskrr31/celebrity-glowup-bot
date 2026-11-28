@@ -2,12 +2,6 @@
   "bot": "celeb_news",
   "runs": [
     {
-      "ts": "2026-09-04T19:12:52",
-      "status": "ok",
-      "video_id": "A7zZKdPl1Pg",
-      "title": "Everyone Is Talking About This 😳 #shorts #celebrity"
-    },
-    {
       "ts": "2026-11-09T12:57:37",
       "status": "ok",
       "video_id": "MdLBwO0heCk",
@@ -120,6 +114,12 @@
       "status": "ok",
       "video_id": "8vvCOkii-4I",
       "title": "Teresa Giudice says celeb ID reveal was rude! #shorts #teresagiudice #gossip"
+    },
+    {
+      "ts": "2026-11-28T00:19:24",
+      "status": "ok",
+      "video_id": "CXPlXRBPXWM",
+      "title": "The Killers' Singer Fights 40% Survival Odds Welcomes Baby! #shorts #thekillers"
     }
   ]
 }
